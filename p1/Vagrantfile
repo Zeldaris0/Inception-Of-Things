@@ -1,0 +1,56 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+server_ip = "192.168.42.110"
+serverworker_ip = "192.168.42.111"
+
+Vagrant.configure("2") do |config|
+  
+
+  config.vm.define "moel-aza" do |server|
+    #BOX settings
+    server.vm.box = "centos/7"
+
+    #Provider settings
+    server.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"
+      vb.cpus = 1
+      vb.name = "moel-aza"
+    end
+
+    #Network settings
+    server.vm.network "private_network", ip: server_ip
+    server.vm.hostname = "moel-azaS"
+
+    #Folder settings
+    #server.vm.synced_folder "./scripts", "/vagrant_data"
+
+    #Provision settings
+    server.vm.provision "shell", path: "scripts/k3s_worker.sh"
+
+  end
+
+  config.vm.define "nhamid" do |worker|
+    #BOX settings
+    worker.vm.box = "centos/7"
+
+    #Provider settings
+    worker.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"
+      vb.cpus = 1
+      vb.name = "nhamid"
+    end
+
+    #Network settings
+    worker.vm.network "private_network", ip: serverworker_ip
+    worker.vm.hostname = "moel-azaSw"
+
+    #Folder settings
+    #worker.vm.synced_folder "./scripts", "/vagrant_data"
+
+    #Provision settings
+    worker.vm.provision "shell", path: "scripts/k3s_worker.sh"
+
+  end
+  
+end
