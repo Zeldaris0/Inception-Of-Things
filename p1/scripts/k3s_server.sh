@@ -1,10 +1,6 @@
 #!/bin/bash
 
-sudo yum install net-tools
-yum provides /usr/sbin/semanage
-yum install policycoreutils-python
-
-yum install -y kubectl
-curl -sfL https://get.k3s.io | sh -
-mkdir /root/.kube
-cp /etc/rancher/k3s/k3s.yaml /root/.kube/config
+yum install -y net-tools
+systemctl disable firewalld --now
+curl -sfL https://get.k3s.io | sh -s - --flannel-iface=eth1 --write-kubeconfig-mode 644
+cat /var/lib/rancher/k3s/server/node-token  > /config/TOKEN_FILE

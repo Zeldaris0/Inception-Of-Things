@@ -1,8 +1,6 @@
 #!/bin/bash
 
-sudo yum install net-tools
-yum provides /usr/sbin/semanage
-yum install policycoreutils-python
+yum install -y net-tools
+systemctl disable firewalld --now
 
-yum install -y kubectl
-curl -sfL https://get.k3s.io | K3S_URL=https://servername:6443 K3S_TOKEN=nodetoken sh -
+curl -sfL https://get.k3s.io | sh -s - --flannel-iface=eth1 K3S_URL=https://192.168.42.110:6443 K3S_TOKEN_FILE=\"/config/TOKEN_FILE\"
