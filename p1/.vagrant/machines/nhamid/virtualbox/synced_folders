@@ -1,1 +1,0 @@
-{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/Users/aze/Desktop/iot/p1","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}},"virtualbox":{"/config":{"guestpath":"/config","hostpath":"/Users/aze/Desktop/iot/p1/config","disabled":false,"__vagrantfile":true}}}
