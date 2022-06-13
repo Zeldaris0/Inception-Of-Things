@@ -30,9 +30,7 @@ install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 #create k8s cluster
 k3d cluster create --api-port $1:6443 -p "80:80@loadbalancer" nhamid
 
-k3d kubeconfig get nhamid > config
-
-#playground
+#running the playground application
 kubectl create namespace dev
 kubectl apply -f confs/playground.yaml -n dev
 kubectl apply -f confs/ingress.yaml -n dev
@@ -40,17 +38,22 @@ kubectl apply -f confs/ingress.yaml -n dev
 
 
 # argocd
+# https://tanzu.vmware.com/developer/guides/argocd-gs/
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl apply -f confs/argocd.yaml
+
+#check the status of pods
+# sudo kubectl get pods -n argocd
 
 #port forwarding for argocd
 # sudo kubectl get all -n argocd # to get the service name for tje argocd http server
 # sudo kubectl -n argocd port-forward svc/argocd-server 8080:443 --address="0.0.0.0"
 
-# get secrets
+#get secrets
 # sudo kubectl -n argocd get secrets
-# sudo kubectl get secret argocd-initial-admin-secret -n argocd -o yaml
-# echo YVpoODB0eks3NGpFVmphVg== | base64 decode
 
+# sudo kubectl get secret argocd-initial-admin-secret -n argocd -o yaml
+# echo password | base64 decode
+# or
 # echo $(sudo kubectl get secret argocd-initial-admin-secret -n argocd -o yaml | sed -n 3p | cut -d ":" -f2 | tr -d " ") | base64 -d
