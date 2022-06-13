@@ -44,7 +44,8 @@ kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl apply -f confs/argocd.yaml
 
-# sudo kubectl get all -n argocd
+#port forwarding for argocd
+# sudo kubectl get all -n argocd # to get the service name for tje argocd http server
 # sudo kubectl -n argocd port-forward svc/argocd-server 8080:443 --address="0.0.0.0"
 
 # get secrets
