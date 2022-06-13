@@ -1,6 +1,11 @@
 #! /bin/bash
 
-ip addr add 10.30.12.69/16 dev enp0s3
+if [ -z $1 ]; then
+        echo "Please enter a static ip addr to use during the setup"
+        exit 0
+fi
+
+ip addr add $1/16 dev enp0s3
 
 # install docker
 echo "installing docker"
@@ -23,7 +28,7 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 #create k8s cluster
-k3d cluster create --api-port 10.30.12.69:6443 -p "80:80@loadbalancer" nhamid
+k3d cluster create --api-port $1:6443 -p "80:80@loadbalancer" nhamid
 
 k3d kubeconfig get nhamid > config
 
@@ -36,5 +41,15 @@ kubectl apply -f confs/ingress.yaml -n dev
 
 # argocd
 kubectl create namespace argocd
-kubectl apply -n confs/argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl apply -f confs/argocd.yaml
+
+# sudo kubectl get all -n argocd
+# sudo kubectl -n argocd port-forward svc/argocd-server 8080:443 --address="0.0.0.0"
+
+# get secrets
+# sudo kubectl -n argocd get secrets
+# sudo kubectl get secret argocd-initial-admin-secret -n argocd -o yaml
+# echo YVpoODB0eks3NGpFVmphVg== | base64 decode
+
+# echo $(sudo kubectl get secret argocd-initial-admin-secret -n argocd -o yaml | sed -n 3p | cut -d ":" -f2 | tr -d " ") | base64 -d

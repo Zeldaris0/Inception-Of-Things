@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/nhamidn/iot.git
     targetRevision: HEAD
-    path: dev
+    path: .
   destination:
     server: https://kubernetes.default.svc
     namespace: dev
